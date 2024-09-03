@@ -1,0 +1,36 @@
+# Define the compiler
+CC = gcc
+
+# Define the output executable name
+TARGET = vulnerable_program
+
+# Define the source files
+SRCS = main.c vulnerable.c
+
+# Define the object files
+OBJS = $(SRCS:.c=.o)
+
+# Default rule
+all: $(TARGET)
+
+# Platform-specific settings
+ifeq ($(OS),Windows_NT)
+    # Windows settings
+    RM = del /Q
+    TARGET := $(TARGET).exe
+else
+    # Linux/Unix settings
+    RM = rm -f
+endif
+
+# Rule to create the executable
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS)
+
+# Rule to create object files
+%.o: %.c
+	$(CC) -c $< -o $@
+
+# Clean rule to remove generated files
+clean:
+	$(RM) $(OBJS) $(TARGET)
